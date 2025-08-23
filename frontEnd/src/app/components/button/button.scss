@@ -1,0 +1,27 @@
+@use 'sass:color';
+@use '../../shared/styles/colors.scss';
+
+
+button {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 2px 4px 8px #0001;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 16px;
+  font-family: 'Roboto', Arial, sans-serif;
+
+  &.primary {
+    background: colors.$color-danger;
+    &:hover { background: color.adjust(colors.$color-danger, $lightness: -10%); }
+  }
+  &.secondary {
+    background: colors.$color-secondary;
+    &:hover { background: color.adjust(colors.$color-secondary, $lightness: -10%); }
+  }
+}

@@ -1,0 +1,22 @@
+@use '../../shared/styles/colors.scss';
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+  .icon {
+    margin-right: 8px;
+    color: colors.$color-secondary;
+  }
+
+  input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+  }
+}
