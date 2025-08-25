@@ -1,12 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Login } from './pages/login/login';
+import { Cadastro } from './pages/cadastro/cadastro';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Login],
-  template: '<app-login></app-login>',
+  imports: [RouterOutlet, Login, Cadastro],
+  template: '<app-cadastro></app-cadastro>',
   styleUrl: './app.scss'
 })
 export class App {

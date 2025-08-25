@@ -4,12 +4,10 @@ import { Button } from '../../components/button/button';
 import { ButtonGoogle } from '../../components/button-google/button-google';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-cadastro',
   standalone: true,
   imports: [InputField, Button, ButtonGoogle],
-  templateUrl: './login.html',
-  styleUrl: './login.scss'
+  templateUrl: './cadastro.html',
+  styleUrl: './cadastro.scss'
 })
-export class Login {
-
-}
+export class Cadastro {}

@@ -1,0 +1,105 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #dbeaea;
+}
+
+.register-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 4px 8px 16px #0002;
+  display: flex;
+  padding: 40px 32px;
+  gap: 32px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.register-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  h2 {
+    color: #d81b37;
+    margin-bottom: 12px;
+    font-size: 2rem;
+    text-align: left;
+  }
+
+  .logo {
+    max-width: 180px;
+    margin-bottom: 24px;
+    margin-top: 24px;
+    align-self: center;
+    //alin
+  }
+
+  .features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1.1rem;
+    padding-top: 10%;
+
+    li {
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      color: #d81b37;
+
+      .check {
+        color: #7ac943;
+        margin-right: 8px;
+        font-size: 1.2em;
+      }
+    }
+    li:nth-child(2n) {
+      color: #333;
+    }
+  }
+}
+
+.register-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  h3 {
+    color: #d81b37;
+    margin-bottom: 18px;
+    font-size: 1.1rem;
+    text-align: left;
+  }
+
+  app-input-field {
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .divider {
+    text-align: center;
+    margin: 18px 0 12px 0;
+    color: #888;
+    font-size: 0.95rem;
+    position: relative;
+  }
+
+  .login-text {
+    margin-top: 16px;
+    text-align: center;
+    color: #d81b37;
+    font-size: 0.95rem;
+
+    a {
+      color: #d81b37;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
+}

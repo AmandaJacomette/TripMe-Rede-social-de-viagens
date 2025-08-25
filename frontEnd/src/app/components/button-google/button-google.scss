@@ -1,0 +1,17 @@
+@use '../../shared/styles/colors.scss';
+
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid colors.$color-secondary;
+    background: white;
+    padding: 0.6rem;
+    border-radius: 6px;
+    width: 100%;
+    cursor: pointer;
+    img {
+      width: 18px;
+      margin-right: 8px;
+    }
+}
