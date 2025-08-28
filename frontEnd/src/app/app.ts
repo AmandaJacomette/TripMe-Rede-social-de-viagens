@@ -6,8 +6,8 @@ import { Cadastro } from './pages/cadastro/cadastro';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Login, Cadastro],
-  template: '<app-cadastro></app-cadastro>',
+  imports: [RouterOutlet],
+  template: '<router-outlet></router-outlet>',
   styleUrl: './app.scss'
 })
 export class App {

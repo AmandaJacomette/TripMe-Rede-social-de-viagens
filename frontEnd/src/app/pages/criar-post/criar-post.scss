@@ -1,0 +1,49 @@
+@use '../../shared/styles/colors.scss';
+
+.feed-container {
+  display: flex;
+  min-height: 100vh;
+  background: #fafbfb;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+
+  .card-row {
+    display: flex;
+    gap: 40px;
+  }
+
+  .card {
+    width: 220px;
+    height: 220px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 2px 4px 8px #0001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+
+    &:hover {
+      box-shadow: 2px 8px 16px #0002;
+    }
+
+    .plus {
+      font-size: 3.5rem;
+      color: colors.$color-danger;
+      margin-bottom: 18px;
+    }
+    .card-label {
+      color: colors.$color-danger;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+  }
+}

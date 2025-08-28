@@ -8,14 +8,14 @@
 
     <a href="#" class="forgot">Esqueceu a senha?</a>
 
-    <app-button text="ENTRAR" color="primary"></app-button>
+    <app-button text="ENTRAR" color="primary" (click)="irParaFeed()"></app-button>
 
     <div class="divider">Ou</div>
 
     <app-button-google></app-button-google>
 
     <p class="register-text">
-      Não é um membro? <a href="#">Cadastre-se já!</a>
+      Não é um membro? <a routerLink="/cadastro">Cadastre-se já!</a>
     </p>
   </div>
 </div>

@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { routes } from './app.routes';
 
 // Componentes
 import { App } from './app';
@@ -15,6 +17,8 @@ import { Login } from './pages/login/login';
   imports: [
     BrowserModule,
     FormsModule,
+    RouterModule.forRoot(routes),
+
     // Importe os componentes standalone aqui
     App,
     InputField,
