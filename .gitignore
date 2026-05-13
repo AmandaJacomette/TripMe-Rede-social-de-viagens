@@ -29,3 +29,4 @@ yarn-error.log*
 
 BackEnd/.env
 /.idea/
+.env
