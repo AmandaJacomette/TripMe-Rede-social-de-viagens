@@ -1,0 +1,17 @@
+# Framework Web e Servidor
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+
+# Banco de Dados e ORM
+SQLAlchemy>=2.0.0
+psycopg2-binary>=2.9.7
+
+# Manipulação de Dados e Arquivos
+pydantic>=2.0.0
+python-multipart>=0.0.6
+
+# Variáveis de Ambiente
+python-dotenv>=1.0.0
+
+# Armazenamento de Imagens
+cloudinary>=1.36.0

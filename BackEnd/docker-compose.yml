@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # 1. BANCO DE DADOS (POSTGRESQL)
+  # ==========================================
+  db:
+    image: postgres:15-alpine
+    container_name: trip_me_db
+    restart: always
+    environment:
+      POSTGRES_USER: tripme_user
+      POSTGRES_PASSWORD: tripme_password
+      POSTGRES_DB: trip_me_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # ==========================================
+  # 2. INTERFACE VISUAL DO BANCO (PGADMIN)
+  # ==========================================
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: trip_me_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@tripme.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+    name: trip_me_db_data
