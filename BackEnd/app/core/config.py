@@ -11,7 +11,6 @@ load_dotenv()
 # 2. Configurações do Banco de Dados (PostgreSQL)
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# O engine é quem realmente se conecta ao banco
 engine = create_engine(DATABASE_URL)
 
 # O SessionLocal será usado para criar uma "sessão" a cada requisição à API

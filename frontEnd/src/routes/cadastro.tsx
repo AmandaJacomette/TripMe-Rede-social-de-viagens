@@ -1,0 +1,49 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Logo } from "@/components/Logo";
+import { Mail, Lock, User, Phone, CheckCircle2 } from "lucide-react";
+
+export const Route = createFileRoute("/cadastro")({ component: Page });
+
+const perks = ["Previsão de gastos", "Conteúdos exclusivos", "Dicas e experiências", "Roteiros personalizáveis", "Avaliações de quem viveu", "E muito mais"];
+
+function Page() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[color:var(--brand-mint)] p-4">
+      <div className="w-full max-w-4xl rounded-3xl bg-card p-8 shadow-xl border grid md:grid-cols-2 gap-8">
+        <div>
+          <p className="text-sm text-muted-foreground">Bem vindo ao</p>
+          <Logo size="lg" />
+          <h3 className="mt-6 font-display text-lg font-bold">Aqui você encontra:</h3>
+          <ul className="mt-3 space-y-2 text-sm">
+            {perks.map((p) => (
+              <li key={p} className="flex items-center gap-2"><CheckCircle2 className="size-4 text-[color:var(--brand-green)]" />{p}</li>
+            ))}
+          </ul>
+        </div>
+        <form className="space-y-3">
+          <p className="text-sm text-muted-foreground">Para agora mesmo o seu cadastro!</p>
+          <Field icon={User} placeholder="Insira seu nome completo" />
+          <Field icon={User} placeholder="Insira seu @ aqui" />
+          <Field icon={Mail} placeholder="Insira seu e-mail" type="email" />
+          <Field icon={Lock} placeholder="Insira sua senha" type="password" />
+          <Field icon={Phone} placeholder="Insira seu telefone" />
+          <button type="button" className="w-full rounded-full bg-[color:var(--brand-red)] py-3 text-sm font-semibold text-white hover:opacity-95">CADASTRAR</button>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground"><div className="h-px flex-1 bg-border" /> ou <div className="h-px flex-1 bg-border" /></div>
+          <button type="button" className="w-full rounded-full border bg-card py-3 text-sm font-semibold hover:bg-muted flex items-center justify-center gap-2">
+            <img src="https://www.google.com/favicon.ico" className="size-4" alt="" /> CONTINUE COM O GOOGLE
+          </button>
+          <p className="text-center text-xs text-muted-foreground">Já tem conta? <Link to="/login" className="font-semibold text-[color:var(--brand-red)]">Entrar</Link></p>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function Field({ icon: Icon, ...props }: any) {
+  return (
+    <div className="relative">
+      <Icon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+      <input {...props} className="w-full rounded-full border bg-card pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[color:var(--brand-red)]/30" />
+    </div>
+  );
+}

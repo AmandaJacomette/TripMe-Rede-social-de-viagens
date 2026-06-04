@@ -26,10 +26,10 @@ class User(Base):
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     name = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, index=True, nullable=False)
+    hashed_password = Column(String(255), nullable=False)
     profile_pic = Column(Text, nullable=True)
     bio = Column(String(255), nullable=True)
     
-    # Relacionamentos
     posts = relationship("Post", back_populates="author", cascade="all, delete-orphan")
     routes = relationship("Route", back_populates="creator")
     likes = relationship("PostLike", back_populates="user")
