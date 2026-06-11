@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Optional
 from datetime import datetime
+from .auth_schema import UserResponse
 
 # ==========================================
 # ESQUEMAS PARA FOTOS (PHOTOS)
@@ -27,14 +28,15 @@ class CommentBase(BaseModel):
     text: str = Field(..., min_length=1, description="Conteúdo do comentário")
 
 class CommentCreate(CommentBase):
-    """O Angular envia apenas o texto. O ID do post vai na URL da requisição e o ID do usuário pegamos do token de login."""
     pass
 
 class CommentResponse(CommentBase):
     id: str
+    text: str
     created_at: datetime
-    user_id: str
-    post_id: str
+    author: UserResponse
+    #user_id: str
+    #post_id: str
     
     model_config = ConfigDict(from_attributes=True)
 
@@ -50,33 +52,48 @@ class PostLikeResponse(BaseModel):
     
     model_config = ConfigDict(from_attributes=True)
 
+# ==========================================
+#  ESQUEMA PARA LUGARES (PLACES)
+# ==========================================
+class PlaceResponse(BaseModel):
+    id: str
+    name: str = Field(..., description="Nome do local")
+    lat: float = Field(..., description="Latitude")
+    lon: float = Field(..., description="Longitude")
+    visits_count: int = Field(0, description="Contador de visitas do local")
+
+    model_config = ConfigDict(from_attributes=True)
 
 # ==========================================
 # ESQUEMAS PARA PUBLICAÇÕES (POSTS)
 # ==========================================
-
 class PostBase(BaseModel):
     content: Optional[str] = Field(None, description="Legenda ou texto da publicação")
     route_id: Optional[str] = Field(None, description="ID de um roteiro associado a esta publicação (opcional)")
 
 class PostCreate(PostBase):
-    """
-    Esquema para criação do Post.
-    Nota: No FastAPI, o upload de arquivos de imagem geralmente é feito via Form-Data, 
-    mas usamos photo_urls aqui caso o Angular faça o upload para o Cloudinary primeiro 
-    e envie apenas as URLs prontas para o Back-end.
-    """
-    photo_urls: Optional[List[str]] = Field(default=[], description="Lista de URLs das imagens")
+    """O front-end envia os dados geográficos soltos aqui ao publicar"""
+    location_name: Optional[str] = Field(None, description="Nome do lugar vindo do mapa")
+    latitude: Optional[float] = Field(None, description="Coordenada de Latitude")
+    longitude: Optional[float] = Field(None, description="Coordenada de Longitude")
+    photo_urls: Optional[List[str]] = Field(default_factory=list, description="Lista de URLs das imagens")
 
-class PostResponse(PostBase):
-    """O formato completo do Post que vai popular o Feed Inteligente do Angular"""
+class PostResponse(BaseModel):
     id: str
+    content: Optional[str]
     created_at: datetime
-    user_id: str
-    
-    # Aninhamento: Um post já devolve as suas fotos, comentários e curtidas de uma vez só
-    photos: List[PhotoResponse] = []
+    route_id: Optional[str]
+    place_id: Optional[str]
+    place: Optional[PlaceResponse] 
+    photos: List[PhotoResponse]     
+    author: UserResponse  
+    likes: List[PostLikeResponse] = [] 
     comments: List[CommentResponse] = []
-    likes: List[PostLikeResponse] = []
+             
     
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        orm_mode = True
+
+class PaginatedPostsResponse(BaseModel):
+    items: List[PostResponse]       # Mapeia diretamente o data.items do front
+    next_page: Optional[int] = None # Mapeia o data.next_page do front

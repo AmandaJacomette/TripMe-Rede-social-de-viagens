@@ -1,16 +1,16 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   Home, Users, Compass, Map, Sparkles, Bell, PlusCircle, Search, LogOut, Settings,
 } from "lucide-react";
 import { Logo } from "./Logo";
 import type { ReactNode } from "react";
+import { useAuth } from "@/lib/auth"; // Presumo que este hook gerencie a rota /users/me
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 const nav = [
   { to: "/", label: "Para você", icon: Home },
-  { to: "/seguindo", label: "Seguindo", icon: Users },
   { to: "/explorar", label: "Explorar", icon: Compass },
   { to: "/roteiros", label: "Roteiros", icon: Map },
   { to: "/criadores", label: "Criadores", icon: Sparkles },
@@ -20,6 +20,22 @@ const nav = [
 
 export function AppShell({ children, right }: { children: ReactNode; right?: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+  
+  // Pegando os dados reais vindos do seu contexto de autenticação
+  const { user, logout } = useAuth();
+  console.log(user)
+  
+  // Mapeando os dados do usuário logado (com fallbacks de segurança)
+  const displayName = user?.name || "Usuário";
+  const rawHandle = user?.username || user?.handle || "";
+  const handle = rawHandle.startsWith("@") ? rawHandle : `@${rawHandle}`;
+  const avatar = user?.avatar || (user as any)?.avatar_url || user?.profile_pic || "https://i.pravatar.cc/80?img=47";
+
+  const handleLogout = () => { 
+    logout(); 
+    navigate({ to: "/login" }); 
+  };
 
   return (
     <div className="min-h-screen bg-[color:var(--brand-mint)]/40">
@@ -59,11 +75,11 @@ export function AppShell({ children, right }: { children: ReactNode; right?: Rea
 
           <div className="mt-auto border-t pt-4">
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex w-full items-center gap-3 rounded-xl px-2 py-2 hover:bg-muted text-left">
-                <img src="https://i.pravatar.cc/80?img=47" alt="" className="size-9 rounded-full object-cover" />
+              <DropdownMenuTrigger className="flex w-full items-center gap-3 rounded-xl px-2 py-2 hover:bg-muted text-left outline-none">
+                <img src={avatar} alt={`Avatar de ${displayName}`} className="size-9 rounded-full object-cover" />
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-semibold">Amanda</div>
-                  <div className="truncate text-xs text-muted-foreground">@amandatrip</div>
+                  <div className="truncate text-sm font-semibold">{displayName}</div>
+                  {rawHandle && <div className="truncate text-xs text-muted-foreground">{handle}</div>}
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
@@ -74,8 +90,8 @@ export function AppShell({ children, right }: { children: ReactNode; right?: Rea
                   <Link to="/perfil/ajustes"><Settings className="size-4 mr-2" /> Ajustes</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="/login" className="text-[color:var(--brand-red)]"><LogOut className="size-4 mr-2" /> Sair</Link>
+                <DropdownMenuItem onSelect={handleLogout} className="text-[color:var(--brand-red)] cursor-pointer">
+                  <LogOut className="size-4 mr-2" /> Sair
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -96,7 +112,7 @@ export function AppShell({ children, right }: { children: ReactNode; right?: Rea
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t bg-card/95 backdrop-blur px-2 py-1.5">
         <ul className="grid grid-cols-5 text-[10px]">
-          {nav.slice(0, 4).concat(nav[6]).map((n) => {
+          {nav.slice(0, 4).concat(nav[5]).map((n) => {
             const active = pathname === n.to || (n.to !== "/" && pathname.startsWith(n.to));
             return (
               <li key={n.to}>

@@ -7,6 +7,7 @@ from typing import Optional
 
 class UserBase(BaseModel):
     name: str = Field(..., min_length=2, description="Nome completo ou de exibição")
+    username: str = Field(..., min_length=2, description="Nome de usuário")
     # EmailStr valida automaticamente se tem '@' e '.com'
     email: EmailStr = Field(..., description="Endereço de e-mail do usuário")
     profile_pic: Optional[str] = Field(None, description="URL da foto de perfil")

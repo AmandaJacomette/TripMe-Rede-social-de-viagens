@@ -36,7 +36,7 @@ def read_root():
 
 # 5. Registro das Rotas (Endpoints)
 
-app.include_router(auth.router, prefix="/api/v1/auth", tags=["Autenticação"])
-app.include_router(feed_endpoints.router, prefix="/api/v1/feed", tags=["Feed Inteligente"])
-app.include_router(post_endpoints.router, prefix="/api/v1/posts", tags=["Publicações"])
-app.include_router(route_endpoints.router, prefix="/api/v1/routes", tags=["Roteiros"])
+app.include_router(auth.router, prefix="/auth", tags=["Autenticação"])
+app.include_router(feed_endpoints.router, prefix="/feed", tags=["Feed Inteligente"])
+app.include_router(post_endpoints.router, prefix="/posts", tags=["Publicações"])
+app.include_router(route_endpoints.router, prefix="/routes", tags=["Roteiros"])

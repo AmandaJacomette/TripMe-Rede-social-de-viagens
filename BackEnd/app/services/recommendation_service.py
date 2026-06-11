@@ -1,24 +1,51 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from datetime import datetime, timedelta
-from app.models.domain import Post, Route, PostLike
+from typing import Optional  
+from app.models.domain import Post, Route, PostLike, Comment
 
-def calculate_feed_score(db: Session, user_id: str, skip: int = 0, limit: int = 20):
+def calculate_feed_score(db: Session, user_id: Optional[str] = None, skip: int = 0, limit: int = 20):
     cutoff_date = datetime.utcnow() - timedelta(days=15)
-    recent_posts = db.query(Post).filter(Post.created_at >= cutoff_date).all()
-    
-    # Se não tiver posts recentes, puxa os normais aplicando a paginação do banco
-    if not recent_posts:
-        return db.query(Post).order_by(Post.created_at.desc()).offset(skip).limit(limit).all()
-
-    liked_categories_query = (
-        db.query(Route.category)
-        .join(Post, Post.route_id == Route.id)
-        .join(PostLike, PostLike.post_id == Post.id)
-        .filter(PostLike.user_id == user_id)
-        .distinct()
+    recent_posts = (
+        db.query(Post)
+        .options(
+            joinedload(Post.author),
+            joinedload(Post.place),
+            joinedload(Post.photos),
+            joinedload(Post.likes),
+            joinedload(Post.comments).joinedload(Comment.author)
+        )
+        .filter(Post.created_at >= cutoff_date)
         .all()
     )
-    recent_categories_liked = [item[0] for item in liked_categories_query if item[0]]
+    
+    # Se não tiver posts recentes, aplica o mesmo joinedload na busca de fallback
+    if not recent_posts:
+        return (
+            db.query(Post)
+            .options(
+                joinedload(Post.author),
+                joinedload(Post.place),
+                joinedload(Post.photos),
+                joinedload(Post.likes),
+                joinedload(Post.comments).joinedload(Comment.author)
+            )
+            .order_by(Post.created_at.desc())
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+
+    recent_categories_liked = []
+    if user_id:
+        liked_categories_query = (
+            db.query(Route.category)
+            .join(Post, Post.route_id == Route.id)
+            .join(PostLike, PostLike.post_id == Post.id)
+            .filter(PostLike.user_id == user_id)
+            .distinct()
+            .all()
+        )
+        recent_categories_liked = [item[0] for item in liked_categories_query if item[0]]
 
     scored_posts = []
     now = datetime.utcnow()
@@ -35,17 +62,15 @@ def calculate_feed_score(db: Session, user_id: str, skip: int = 0, limit: int = 
         decayed_score = base_score / time_decay_factor
 
         category_boost = 1.0
-        if post.route_id:
+        if post.route_id and recent_categories_liked: 
             route = db.query(Route).filter(Route.id == post.route_id).first()
             if route and route.category in recent_categories_liked:
                 category_boost = 1.5
         
         final_score = decayed_score * category_boost
-        
         scored_posts.append({"post": post, "score": final_score})
 
     scored_posts.sort(key=lambda x: x["score"], reverse=True)
-    
     top_posts = [item["post"] for item in scored_posts[skip : skip + limit]]
     
     return top_posts

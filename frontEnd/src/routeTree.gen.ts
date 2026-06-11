@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SeguindoRouteImport } from './routes/seguindo'
 import { Route as NotificacoesRouteImport } from './routes/notificacoes'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ExplorarRouteImport } from './routes/explorar'
@@ -26,11 +25,6 @@ import { Route as LocalIdRouteImport } from './routes/local.$id'
 import { Route as RoteirosIdIndexRouteImport } from './routes/roteiros.$id.index'
 import { Route as RoteirosIdParadaStopIdRouteImport } from './routes/roteiros.$id.parada.$stopId'
 
-const SeguindoRoute = SeguindoRouteImport.update({
-  id: '/seguindo',
-  path: '/seguindo',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const NotificacoesRoute = NotificacoesRouteImport.update({
   id: '/notificacoes',
   path: '/notificacoes',
@@ -114,7 +108,6 @@ export interface FileRoutesByFullPath {
   '/explorar': typeof ExplorarRoute
   '/login': typeof LoginRoute
   '/notificacoes': typeof NotificacoesRoute
-  '/seguindo': typeof SeguindoRoute
   '/local/$id': typeof LocalIdRoute
   '/perfil/ajustes': typeof PerfilAjustesRoute
   '/publicar/post': typeof PublicarPostRoute
@@ -132,7 +125,6 @@ export interface FileRoutesByTo {
   '/explorar': typeof ExplorarRoute
   '/login': typeof LoginRoute
   '/notificacoes': typeof NotificacoesRoute
-  '/seguindo': typeof SeguindoRoute
   '/local/$id': typeof LocalIdRoute
   '/perfil/ajustes': typeof PerfilAjustesRoute
   '/publicar/post': typeof PublicarPostRoute
@@ -151,7 +143,6 @@ export interface FileRoutesById {
   '/explorar': typeof ExplorarRoute
   '/login': typeof LoginRoute
   '/notificacoes': typeof NotificacoesRoute
-  '/seguindo': typeof SeguindoRoute
   '/local/$id': typeof LocalIdRoute
   '/perfil/ajustes': typeof PerfilAjustesRoute
   '/publicar/post': typeof PublicarPostRoute
@@ -171,7 +162,6 @@ export interface FileRouteTypes {
     | '/explorar'
     | '/login'
     | '/notificacoes'
-    | '/seguindo'
     | '/local/$id'
     | '/perfil/ajustes'
     | '/publicar/post'
@@ -189,7 +179,6 @@ export interface FileRouteTypes {
     | '/explorar'
     | '/login'
     | '/notificacoes'
-    | '/seguindo'
     | '/local/$id'
     | '/perfil/ajustes'
     | '/publicar/post'
@@ -207,7 +196,6 @@ export interface FileRouteTypes {
     | '/explorar'
     | '/login'
     | '/notificacoes'
-    | '/seguindo'
     | '/local/$id'
     | '/perfil/ajustes'
     | '/publicar/post'
@@ -226,7 +214,6 @@ export interface RootRouteChildren {
   ExplorarRoute: typeof ExplorarRoute
   LoginRoute: typeof LoginRoute
   NotificacoesRoute: typeof NotificacoesRoute
-  SeguindoRoute: typeof SeguindoRoute
   LocalIdRoute: typeof LocalIdRoute
   PerfilAjustesRoute: typeof PerfilAjustesRoute
   PublicarPostRoute: typeof PublicarPostRoute
@@ -240,13 +227,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/seguindo': {
-      id: '/seguindo'
-      path: '/seguindo'
-      fullPath: '/seguindo'
-      preLoaderRoute: typeof SeguindoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/notificacoes': {
       id: '/notificacoes'
       path: '/notificacoes'
@@ -362,7 +342,6 @@ const rootRouteChildren: RootRouteChildren = {
   ExplorarRoute: ExplorarRoute,
   LoginRoute: LoginRoute,
   NotificacoesRoute: NotificacoesRoute,
-  SeguindoRoute: SeguindoRoute,
   LocalIdRoute: LocalIdRoute,
   PerfilAjustesRoute: PerfilAjustesRoute,
   PublicarPostRoute: PublicarPostRoute,

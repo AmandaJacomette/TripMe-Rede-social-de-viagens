@@ -3,13 +3,15 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from jose import jwt
+from fastapi.security import OAuth2PasswordBearer
+from jose import jwt, JWTError
 
 from app.core.config import get_db, SECRET_KEY
 from app.models.domain import User
 from app.schemas.auth_schema import UserCreate, UserResponse, UserLogin, Token
 
 router = APIRouter()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 # ==========================================
 # CONFIGURAÇÕES DE SEGURANÇA
@@ -17,7 +19,7 @@ router = APIRouter()
 # Criptografia de senhas usando Bcrypt
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Configuração do Token (O Angular usará isso para se manter logado)
+# Configuração do Token
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # Token dura 7 dias
 
@@ -58,6 +60,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     new_user = User(
         id=str(uuid.uuid4()),
         name=user.name,
+        username=user.username,
         email=user.email,
         profile_pic=user.profile_pic,
         bio=user.bio,
@@ -90,3 +93,21 @@ def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
     access_token = create_access_token(data={"sub": user.id})
     
     return {"access_token": access_token, "token_type": "bearer"}
+
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise HTTPException(status_code=401, detail="Token inválido")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Token inválido")
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    return user
+
+@router.get("/users/me", response_model=UserResponse)
+def read_users_me(current_user: User = Depends(get_current_user)):
+    return current_user
